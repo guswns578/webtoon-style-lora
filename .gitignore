@@ -1,0 +1,35 @@
+# weights and data (not distributed)
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.npz
+data/
+workspace/
+outputs/
+reports/
+third_party/
+studio/models/*
+!studio/models/manifest.json
+studio/assets/
+studio/examples/
+studio/runtime/
+studio/results/
+studio/verification/
+
+# generated images
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# os
+Thumbs.db
+.DS_Store

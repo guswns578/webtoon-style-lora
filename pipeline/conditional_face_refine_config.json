@@ -1,0 +1,109 @@
+{
+  "forge_api": "http://127.0.0.1:7861",
+  "checkpoint": "waiIllustriousSDXL_v160.safetensors",
+  "output_root": "workspace/conditional_face_refine",
+  "reference_face_dir": "workspace/face_crops",
+  "pose_image": "workspace/pose_src/punch.png",
+  "character": "char_a",
+  "seeds": [43, 100, 211, 777],
+  "width": 896,
+  "height": 1152,
+  "steps": 28,
+  "cfg": 5.0,
+  "sampler": "DPM++ 2M",
+  "scheduler": "Karras",
+  "style_adapter": "<lora:style_dora_e4_final:0.55>",
+  "character_adapter": "<lora:char_locon_e3:0.90>",
+  "controlnet": {
+    "module": "dw_openpose_full",
+    "model": "thibaud_xl_openpose",
+    "weight": 0.9,
+    "guidance_start": 0.0,
+    "guidance_end": 0.9,
+    "control_mode": "Balanced",
+    "resize_mode": "Resize and Fill",
+    "pixel_perfect": true
+  },
+  "pose_evaluation": {
+    "minimum_score_for_direct_accept": 0.45,
+    "identity_weight": 0.55,
+    "pose_weight": 0.45
+  },
+  "identity": {
+    "threshold": 0.09,
+    "soft_threshold": 0.105,
+    "minimum_margin": 0.015,
+    "nearest_reference_count": 3,
+    "face_detection_confidence": 0.15
+  },
+  "refinement": {
+    "enabled": true,
+    "refine_only_if_no_pass": true,
+    "max_candidates": 1,
+    "denoising_strengths": [0.32, 0.42, 0.52],
+    "inpaint_size": 768,
+    "mask_padding": 48,
+    "mask_blur": 6,
+    "confidence": 0.2,
+    "style_adapter": "<lora:style_dora_e4_final:0.50>",
+    "character_adapter": "<lora:char_locon_e3:1.05>"
+  },
+  "characters": {
+    "char_a": {
+      "trigger": "char_a_character",
+      "reference_prefix": "char_a_",
+      "positive": "1boy, male focus, solo, full body, standing fighting stance, face visible, looking at viewer, simple background, short hair, hair between eyes, sharp narrow eyes, angular face, serious expression, cloak, light armor, clean black ink lineart, delicate ink lines, white background",
+      "face_positive": "char_a_character, close-up, face focus, short hair, hair between eyes, sharp narrow eyes, angular face, serious expression, closed mouth, clean black ink lineart, delicate ink lines",
+      "face_negative": "round face, childish face, soft expression, beard, facial hair, long hair, color, sepia, gray skin, thick lines, heavy shading"
+    },
+    "char_b": {
+      "trigger": "char_b_legacy_character",
+      "reference_prefix": "char_b_",
+      "positive": "1boy, male focus, solo, full body, mature male, facial hair, beard, thick eyebrows, long hair, ponytail, strong jaw, clean black ink lineart, delicate ink lines, white background",
+      "face_positive": "char_b_legacy_character, close-up, face focus, mature male, beard, stubble, thick eyebrows, sharp eyes, strong jaw, ponytail, clean black ink lineart",
+      "face_negative": "clean-shaven, youthful face, round face, childish face, color, sepia, gray skin, thick lines"
+    },
+    "char_c": {
+      "trigger": "char_c_character",
+      "reference_prefix": "char_c_",
+      "positive": "1boy, male focus, solo, full body, asymmetrical hair, hair over one eye, undercut, long bangs, sharp eyes, cloak, clean black ink lineart, delicate ink lines, white background",
+      "face_positive": "char_c_character, close-up, face focus, asymmetrical hair, hair over one eye, undercut, long bangs, sharp eyes, serious expression, clean black ink lineart",
+      "face_negative": "symmetrical hairstyle, beard, facial hair, round face, childish face, color, sepia, gray skin, thick lines"
+    },
+    "char_d": {
+      "trigger": "char_d_character",
+      "reference_prefix": "char_d_",
+      "positive": "1boy, male focus, solo, full body, muscular male, broad shoulders, slicked back hair, ponytail, clean-shaven, narrow eyes, bandaged arms, clean black ink lineart, delicate ink lines, white background",
+      "face_positive": "char_d_character, close-up, face focus, mature muscular male, slicked back hair, ponytail, clean-shaven, narrow jitome eyes, strong jaw, clean black ink lineart",
+      "face_negative": "beard, stubble, facial hair, soft eyes, round face, childish face, color, sepia, gray skin, thick lines"
+    },
+    "char_e": {
+      "trigger": "char_e_character",
+      "reference_prefix": "char_e_",
+      "positive": "1boy, male focus, solo, full body, youthful male, short hair, single sidelock, asymmetrical hair, slim face, clean black ink lineart, delicate ink lines, white background",
+      "face_positive": "char_e_character, close-up, face focus, youthful male, short hair, single sidelock, asymmetrical hair, slim face, wide eyes, clean black ink lineart",
+      "face_negative": "mature male, beard, facial hair, muscular face, round face, long hair, color, sepia, gray skin, thick lines"
+    },
+    "char_f": {
+      "trigger": "char_f_character",
+      "reference_prefix": "char_f_",
+      "positive": "1boy, male focus, solo, full body, medium wavy hair, loose curls, half updo, elegant face, sharp eyes, clean black ink lineart, delicate ink lines, white background",
+      "face_positive": "char_f_character, close-up, face focus, medium wavy hair, loose curls, half updo, elegant angular face, sharp calm eyes, clean black ink lineart",
+      "face_negative": "short spiky hair, beard, facial hair, round face, childish face, color, sepia, gray skin, thick lines"
+    },
+    "char_g": {
+      "trigger": "char_g_character",
+      "reference_prefix": "char_g_",
+      "positive": "1girl, solo, full body, long hair, pointy ears, elf, slicked back hair, elegant face, sharp eyes, armor, fur trim, clean black ink lineart, delicate ink lines, white background",
+      "face_positive": "char_g_character, close-up, face focus, 1girl, long hair, pointy ears, elf, slicked back hair, elegant face, sharp eyes, clean black ink lineart",
+      "face_negative": "human ears, animal ears, male, beard, round face, childish face, color, sepia, gray skin, thick lines"
+    },
+    "char_h": {
+      "trigger": "char_h_character",
+      "reference_prefix": "char_h_",
+      "positive": "1girl, solo, full body, animal ears, lion ears, long wild hair, big hair, muscular, bandages, clean black ink lineart, delicate ink lines, white background",
+      "face_positive": "char_h_character, close-up, face focus, 1girl, animal ears, lion ears, long wild hair, big hair, fierce eyes, fang, clean black ink lineart",
+      "face_negative": "human ears, male, short neat hair, soft expression, round face, childish face, color, sepia, gray skin, thick lines"
+    }
+  }
+}

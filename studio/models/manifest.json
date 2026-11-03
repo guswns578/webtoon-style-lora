@@ -1,0 +1,55 @@
+{
+  "version": "B-1.0-20261028",
+  "files": [
+    {
+      "file": "Stable-diffusion/waiIllustriousSDXL_v160.safetensors",
+      "bytes": 6938040682,
+      "sha256": "a5f58eb1c33616c4f06bca55af39876a7b817913cd829caa8acb111b770c85cc"
+    },
+    {
+      "file": "ControlNet/thibaud_xl_openpose.safetensors",
+      "bytes": 2502139104,
+      "sha256": "9e070426568a3c60c128ffb98c66cdc7a0ea21d0d8abb86f73564aaf2e0c6f42"
+    },
+    {
+      "file": "Lora/char_a_solo_e3.safetensors",
+      "bytes": 235783264,
+      "sha256": "6f5410e2d08514a4e9d49fd1e6f46b927f46ec9f964d7a5d9d46d09d1af213b3"
+    },
+    {
+      "file": "Lora/char_b_solo_e3.safetensors",
+      "bytes": 235784896,
+      "sha256": "1fd0bf6e7052d34f48525898d7e5af091007655315c7b40de94772eebadc2d3e"
+    },
+    {
+      "file": "Lora/char_e_solo_e3.safetensors",
+      "bytes": 235784864,
+      "sha256": "878f45bc8913b473e083f394533bdb662ebb5176ae1e290dfba079b74368c2ff"
+    },
+    {
+      "file": "Lora/char_f_solo_e3.safetensors",
+      "bytes": 235780408,
+      "sha256": "2774d15b5fdcf0273ae865e769ae1d8a4165f6ebfc72da716dab1f07a2ce0a3d"
+    },
+    {
+      "file": "Lora/char_c_solo_e3.safetensors",
+      "bytes": 235782344,
+      "sha256": "0842877f77e6a2d50e708d00aade74cba35c04e6662714c901c9cb5ebdce3b1a"
+    },
+    {
+      "file": "Lora/char_d_solo.safetensors",
+      "bytes": 235782248,
+      "sha256": "7458376af43068e14230bd067ce6f04ab32f57282433caeadd5729ffe2f4743a"
+    },
+    {
+      "file": "Lora/char_g_solo_e3.safetensors",
+      "bytes": 235780208,
+      "sha256": "e23b9b0df9727ffb5db6fe17d6562f52bd03d3c900fb44b4abd8f231bdd9f792"
+    },
+    {
+      "file": "Lora/char_h_solo_e3.safetensors",
+      "bytes": 235783136,
+      "sha256": "a35f4a59bc538819c228b7424cff93ecdbc1ba8fd02852a7522739fb480a13ad"
+    }
+  ]
+}

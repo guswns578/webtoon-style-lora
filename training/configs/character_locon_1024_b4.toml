@@ -1,0 +1,45 @@
+[general]
+shuffle_caption = true
+caption_extension = ".txt"
+keep_tokens = 4
+
+[[datasets]]
+resolution = [1024, 1024]
+batch_size = 4
+enable_bucket = true
+bucket_no_upscale = true
+min_bucket_reso = 512
+max_bucket_reso = 2048
+bucket_reso_steps = 64
+
+  [[datasets.subsets]]
+  image_dir = "./data/char_run2_clean/prep/char_a"
+  num_repeats = 5
+
+  [[datasets.subsets]]
+  image_dir = "./data/char_run2_clean/prep/char_b"
+  num_repeats = 6
+
+  [[datasets.subsets]]
+  image_dir = "./data/char_run2_clean/prep/char_e"
+  num_repeats = 6
+
+  [[datasets.subsets]]
+  image_dir = "./data/char_run2_clean/prep/char_f"
+  num_repeats = 7
+
+  [[datasets.subsets]]
+  image_dir = "./data/char_run2_clean/prep/char_c"
+  num_repeats = 8
+
+  [[datasets.subsets]]
+  image_dir = "./data/char_run2_clean/prep/char_g"
+  num_repeats = 10
+
+  [[datasets.subsets]]
+  image_dir = "./data/char_run2_clean/prep/char_d"
+  num_repeats = 10
+
+  [[datasets.subsets]]
+  image_dir = "./data/char_run2_clean/prep/char_h"
+  num_repeats = 13

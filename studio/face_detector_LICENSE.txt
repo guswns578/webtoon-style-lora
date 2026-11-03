@@ -1,0 +1,6 @@
+Model: deepghs/anime_face_detection - face_detect_v1.4_n/model.onnx
+Source: https://huggingface.co/deepghs/anime_face_detection
+License: MIT
+
+Used locally by engine.py for anime/manga face detection.
+The model file is ONNX and runs through onnxruntime on CPU.
