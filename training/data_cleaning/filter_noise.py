@@ -9,7 +9,6 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw
 
-
 SRC = Path(r"data/lineart_preprocessed")
 CLEAN = Path(r"data/lineart_clean")
 REJECTS = Path(r"data/lineart_rejects")
@@ -115,19 +114,21 @@ def main() -> None:
 
     with REPORT.open("w", newline="", encoding="utf-8-sig") as f:
         writer = csv.writer(f)
-        writer.writerow([
-            "file",
-            "status",
-            "reasons",
-            "width",
-            "height",
-            "mean",
-            "dark_ratio",
-            "ink_ratio",
-            "mid_ratio",
-            "white_ratio",
-            "std",
-        ])
+        writer.writerow(
+            [
+                "file",
+                "status",
+                "reasons",
+                "width",
+                "height",
+                "mean",
+                "dark_ratio",
+                "ink_ratio",
+                "mid_ratio",
+                "white_ratio",
+                "std",
+            ]
+        )
         for idx, img in enumerate(pngs, 1):
             try:
                 m = metrics(img)
@@ -157,22 +158,26 @@ def main() -> None:
                 copy_pair(img, CLEAN)
                 counts["keep"] += 1
 
-            writer.writerow([
-                img.name,
-                status,
-                "|".join(reasons),
-                m["width"],
-                m["height"],
-                f"{float(m['mean']):.4f}",
-                f"{float(m['dark_ratio']):.6f}",
-                f"{float(m['ink_ratio']):.6f}",
-                f"{float(m['mid_ratio']):.6f}",
-                f"{float(m['white_ratio']):.6f}",
-                f"{float(m['std']):.4f}",
-            ])
+            writer.writerow(
+                [
+                    img.name,
+                    status,
+                    "|".join(reasons),
+                    m["width"],
+                    m["height"],
+                    f"{float(m['mean']):.4f}",
+                    f"{float(m['dark_ratio']):.6f}",
+                    f"{float(m['ink_ratio']):.6f}",
+                    f"{float(m['mid_ratio']):.6f}",
+                    f"{float(m['white_ratio']):.6f}",
+                    f"{float(m['std']):.4f}",
+                ]
+            )
 
             if idx % 1000 == 0:
-                print(f"{idx}/{len(pngs)} scanned, keep={counts['keep']}, reject={counts['reject']}")
+                print(
+                    f"{idx}/{len(pngs)} scanned, keep={counts['keep']}, reject={counts['reject']}"
+                )
 
     make_contact(rejected_paths)
 

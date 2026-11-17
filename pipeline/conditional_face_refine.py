@@ -21,7 +21,6 @@ from imgutils.metrics import ccip_batch_differences, ccip_extract_feature
 from lineart_normalize import normalize_file
 from pose_metrics import detect_pose, pose_metrics, pose_source_quality
 
-
 ROOT = Path(__file__).resolve().parent
 DEFAULT_CONFIG = ROOT / "conditional_face_refine_config.json"
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
@@ -213,10 +212,14 @@ def detect_largest_face(image: Image.Image, confidence: float) -> FaceResult:
     top = max(0, y1 - padding)
     right = min(image.width, x2 + padding)
     bottom = min(image.height, y2 + padding)
-    return FaceResult(image.crop((left, top, right, bottom)), (left, top, right, bottom), float(score))
+    return FaceResult(
+        image.crop((left, top, right, bottom)), (left, top, right, bottom), float(score)
+    )
 
 
-def reference_features(config: dict[str, Any], cache_dir: Path) -> tuple[list[np.ndarray], list[str], list[str]]:
+def reference_features(
+    config: dict[str, Any], cache_dir: Path
+) -> tuple[list[np.ndarray], list[str], list[str]]:
     ref_dir = Path(config["reference_face_dir"])
     cache_file = cache_dir / "reference_features.npz"
     refs = sorted(
@@ -566,7 +569,10 @@ def main() -> int:
         raise FileNotFoundError(config["pose_image"])
 
     stamp = time.strftime("%Y%m%d_%H%M%S")
-    out_dir = args.output or Path(config["output_root"]) / f"{target}_{Path(config['pose_image']).stem}_{stamp}"
+    out_dir = (
+        args.output
+        or Path(config["output_root"]) / f"{target}_{Path(config['pose_image']).stem}_{stamp}"
+    )
     images_dir = out_dir / "images"
     faces_dir = out_dir / "faces"
     cache_dir = Path(config["output_root"]) / "_cache"
@@ -700,15 +706,9 @@ def main() -> int:
     before_rows = [row for row in rows if row["stage"] == "before"]
     after_rows = [row for row in rows if row["stage"] == "after"]
     target_identity_rows = [
-        row
-        for row in rows
-        if row.get("face_detected") and row.get("predicted_character") == target
+        row for row in rows if row.get("face_detected") and row.get("predicted_character") == target
     ]
-    balanced_rows = [
-        row
-        for row in target_identity_rows
-        if bool(row.get("balanced_pass"))
-    ]
+    balanced_rows = [row for row in target_identity_rows if bool(row.get("balanced_pass"))]
     selection_pool = balanced_rows or target_identity_rows or rows
     selected = max(selection_pool, key=lambda row: row["identity_pose_score"])
     selected_balanced_pass = bool(
@@ -716,9 +716,7 @@ def main() -> int:
         and selected.get("pose_detected")
         and float(selected.get("pose_score", 0.0)) >= minimum_pose
     )
-    manual_review_required = bool(
-        not selected_balanced_pass
-    )
+    manual_review_required = bool(not selected_balanced_pass)
     selected_postprocessed = out_dir / "selected_postprocessed.png"
     normalize_file(Path(selected["image"]), selected_postprocessed, gamma=0.40)
     summary = {

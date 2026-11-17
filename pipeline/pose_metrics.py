@@ -114,9 +114,7 @@ def pose_metrics(source_pose: dict[str, Any], candidate_pose: dict[str, Any]) ->
     # would reward a sideways or upside-down ControlNet result.
     aligned = dst_norm
     aligned_rmse = float(np.sqrt(np.mean(np.sum((src_norm - aligned) ** 2, axis=1))))
-    score = float(
-        coverage * math.exp(-5.0 * aligned_rmse) * math.exp(-4.0 * composition_rmse)
-    )
+    score = float(coverage * math.exp(-5.0 * aligned_rmse) * math.exp(-4.0 * composition_rmse))
     return {
         "pose_detected": True,
         "pose_people": len(candidate_pose.get("people") or []),

@@ -7,7 +7,6 @@ import math
 from collections import defaultdict
 from pathlib import Path
 
-
 DEFAULT_INPUT = Path("workspace/expr_seed/ccip_expression_evaluation.csv")
 
 
@@ -20,7 +19,9 @@ def samples_for_hit(success_rate: float, target_probability: float) -> int | Non
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Summarize multi-seed expression identity robustness")
+    parser = argparse.ArgumentParser(
+        description="Summarize multi-seed expression identity robustness"
+    )
     parser.add_argument("input", type=Path, nargs="?", default=DEFAULT_INPUT)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()

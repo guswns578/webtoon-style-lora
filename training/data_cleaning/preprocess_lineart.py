@@ -8,7 +8,6 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageOps
 
-
 SRC_ROOT = Path(r"data/raw_episodes")
 DST_ROOT = Path(r"data/lineart_preprocessed")
 REPORT_PATH = Path(r"reports/lineart_preprocess_report.csv")
@@ -27,7 +26,9 @@ def iter_images() -> list[Path]:
     paths: list[Path] = []
     cut_dirs = sorted(
         [p for p in SRC_ROOT.iterdir() if p.is_dir() and p.name.endswith("_cut")],
-        key=lambda p: int(p.name.removesuffix("_cut")) if p.name.removesuffix("_cut").isdigit() else 999999,
+        key=lambda p: (
+            int(p.name.removesuffix("_cut")) if p.name.removesuffix("_cut").isdigit() else 999999
+        ),
     )
     for cut_dir in cut_dirs:
         for path in sorted(cut_dir.rglob("*")):
@@ -142,17 +143,47 @@ def main() -> None:
             reason = reject_reason(width, height)
             if reason:
                 stats[f"skipped_{reason}"] += 1
-                writer.writerow([str(src), "", width, height, f"{width / max(height, 1):.4f}", "skipped", reason])
+                writer.writerow(
+                    [
+                        str(src),
+                        "",
+                        width,
+                        height,
+                        f"{width / max(height, 1):.4f}",
+                        "skipped",
+                        reason,
+                    ]
+                )
                 continue
 
             dst = DST_ROOT / safe_output_name(src)
             if dst.exists() and dst.stat().st_size > 0:
                 stats["already_done"] += 1
-                writer.writerow([str(src), str(dst), width, height, f"{width / max(height, 1):.4f}", "already_done", ""])
+                writer.writerow(
+                    [
+                        str(src),
+                        str(dst),
+                        width,
+                        height,
+                        f"{width / max(height, 1):.4f}",
+                        "already_done",
+                        "",
+                    ]
+                )
             else:
                 normalize_lineart(src, dst)
                 stats["processed"] += 1
-                writer.writerow([str(src), str(dst), width, height, f"{width / max(height, 1):.4f}", "processed", ""])
+                writer.writerow(
+                    [
+                        str(src),
+                        str(dst),
+                        width,
+                        height,
+                        f"{width / max(height, 1):.4f}",
+                        "processed",
+                        "",
+                    ]
+                )
 
             if idx % 500 == 0:
                 print(f"{idx}/{len(images)} scanned, processed={stats['processed']}")

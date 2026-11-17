@@ -17,7 +17,6 @@ from __future__ import annotations
 import argparse
 import csv
 import re
-import shutil
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -30,6 +29,7 @@ from PIL import Image, ImageOps
 try:
     from tqdm import tqdm
 except ImportError:  # tqdm is only for progress bars.
+
     def tqdm(iterable, **_kwargs):
         return iterable
 
@@ -185,7 +185,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--caption", action="store_true", help="Run WD14 captions.")
     parser.add_argument("--report", action="store_true", help="Write CSV report only/also.")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing files.")
-    parser.add_argument("--skip-low-info", action="store_true", help="Skip tiny/extreme aspect images in prepared copy.")
+    parser.add_argument(
+        "--skip-low-info",
+        action="store_true",
+        help="Skip tiny/extreme aspect images in prepared copy.",
+    )
     parser.add_argument("--no-remove-red-ink", action="store_true")
     parser.add_argument("--no-grayscale", action="store_true")
     parser.add_argument("--no-autocontrast", action="store_true")
@@ -211,7 +215,11 @@ def find_images(root: Path) -> list[ImageInfo]:
                 continue
             try:
                 with Image.open(src) as im:
-                    infos.append(ImageInfo(src=src, rel=src.relative_to(root), width=im.width, height=im.height))
+                    infos.append(
+                        ImageInfo(
+                            src=src, rel=src.relative_to(root), width=im.width, height=im.height
+                        )
+                    )
             except Exception as exc:
                 print(f"[WARN] Cannot read image: {src} ({exc})", file=sys.stderr)
 
@@ -268,7 +276,9 @@ def clean_image(
         im.save(dst)
 
 
-def prepare_dataset(infos: list[ImageInfo], input_root: Path, output_root: Path, args: argparse.Namespace) -> list[Path]:
+def prepare_dataset(
+    infos: list[ImageInfo], input_root: Path, output_root: Path, args: argparse.Namespace
+) -> list[Path]:
     prepared: list[Path] = []
     for info in tqdm(infos, desc="Preparing images"):
         if args.skip_low_info and info.low_info_reason:
@@ -296,7 +306,9 @@ def write_report(infos: list[ImageInfo], output_root: Path) -> Path:
         writer = csv.writer(f)
         writer.writerow(["path", "width", "height", "aspect", "low_info_reason"])
         for info in infos:
-            writer.writerow([str(info.src), info.width, info.height, f"{info.aspect:.4f}", info.low_info_reason])
+            writer.writerow(
+                [str(info.src), info.width, info.height, f"{info.aspect:.4f}", info.low_info_reason]
+            )
     return report_path
 
 
@@ -384,7 +396,9 @@ def caption_images(image_paths: list[Path], args: argparse.Namespace) -> None:
     model_path, tags_path = hf_download_model(args.model_id)
     tag_df = pd.read_csv(tags_path)
     tag_names = tag_df["name"].tolist()
-    categories = tag_df["category"].tolist() if "category" in tag_df.columns else [0] * len(tag_names)
+    categories = (
+        tag_df["category"].tolist() if "category" in tag_df.columns else [0] * len(tag_names)
+    )
 
     providers = ["CUDAExecutionProvider", "CPUExecutionProvider"]
     session = ort.InferenceSession(str(model_path), providers=providers)

@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import base64
 import csv
-import io
 import json
 import math
 import subprocess
@@ -26,13 +25,10 @@ from conditional_face_refine import (
     score_identity,
 )
 
-
 ROOT = Path(__file__).resolve().parent
 CSD_HELPER = ROOT / "csd_embed_images.py"
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
-DEFAULT_STYLE_REFS = Path(
-    r"data/style_references"
-)
+DEFAULT_STYLE_REFS = Path(r"data/style_references")
 
 
 def image_b64(path: Path) -> str:
@@ -135,9 +131,7 @@ def pose_metrics(source_pose: dict[str, Any], candidate_pose: dict[str, Any]) ->
     # would reward a sideways or upside-down ControlNet result.
     aligned = dst_norm
     aligned_rmse = float(np.sqrt(np.mean(np.sum((src_norm - aligned) ** 2, axis=1))))
-    score = float(
-        coverage * math.exp(-5.0 * aligned_rmse) * math.exp(-4.0 * composition_rmse)
-    )
+    score = float(coverage * math.exp(-5.0 * aligned_rmse) * math.exp(-4.0 * composition_rmse))
     return {
         "pose_detected": True,
         "pose_people": len(candidate_pose.get("people") or []),
@@ -197,7 +191,9 @@ def line_reference_stats(paths: list[Path]) -> tuple[dict[str, float], dict[str,
     return means, stds
 
 
-def line_similarity(metrics: dict[str, float], means: dict[str, float], stds: dict[str, float]) -> float:
+def line_similarity(
+    metrics: dict[str, float], means: dict[str, float], stds: dict[str, float]
+) -> float:
     # The target lineart is defined especially by white-space economy, low gray-tone
     # density, and restrained stroke width. Weight those dimensions more than
     # generic edge density.
@@ -209,10 +205,7 @@ def line_similarity(metrics: dict[str, float], means: dict[str, float], stds: di
         "edge_density": 0.7,
         "stroke_width_proxy": 1.5,
     }
-    clipped = {
-        key: min(abs(metrics[key] - means[key]) / stds[key], 5.0)
-        for key in LINE_KEYS
-    }
+    clipped = {key: min(abs(metrics[key] - means[key]) / stds[key], 5.0) for key in LINE_KEYS}
     weighted_z = sum(clipped[key] * weights[key] for key in LINE_KEYS) / sum(weights.values())
     return float(math.exp(-weighted_z / 2.0))
 
@@ -220,7 +213,9 @@ def line_similarity(metrics: dict[str, float], means: dict[str, float], stds: di
 def run_csd(paths: list[Path], output_dir: Path) -> dict[str, np.ndarray]:
     input_json = output_dir / "csd_inputs.json"
     output_npz = output_dir / "csd_embeddings.npz"
-    input_json.write_text(json.dumps([str(path) for path in paths], ensure_ascii=False), encoding="utf-8")
+    input_json.write_text(
+        json.dumps([str(path) for path in paths], ensure_ascii=False), encoding="utf-8"
+    )
     env = dict(__import__("os").environ)
     env["CUDA_VISIBLE_DEVICES"] = "-1"
     subprocess.run(
@@ -287,7 +282,9 @@ def thumb(path: Path, size: tuple[int, int]) -> Image.Image:
 
 def contact_sheet(rows: list[dict[str, Any]], pose: Path, output: Path) -> None:
     items: list[tuple[str, Path]] = [("POSE SOURCE", pose)]
-    for rank, row in enumerate(sorted(rows, key=lambda item: item["composite_score"], reverse=True), 1):
+    for rank, row in enumerate(
+        sorted(rows, key=lambda item: item["composite_score"], reverse=True), 1
+    ):
         label = (
             f"#{rank} {Path(row['image']).stem}\n"
             f"total {row['composite_score']:.3f} | id {row['identity_score']:.3f}\n"
@@ -304,7 +301,9 @@ def contact_sheet(rows: list[dict[str, Any]], pose: Path, output: Path) -> None:
         x = (idx % cols) * cell_w
         y = (idx // cols) * (cell_h + label_h)
         sheet.paste(thumb(path, (cell_w, cell_h)), (x, y))
-        draw.multiline_text((x + 7, y + cell_h + 3), label, font=label_font, fill="black", spacing=1)
+        draw.multiline_text(
+            (x + 7, y + cell_h + 3), label, font=label_font, fill="black", spacing=1
+        )
         draw.rectangle((x, y, x + cell_w - 1, y + cell_h + label_h - 1), outline=(150, 150, 150))
     sheet.save(output)
 
@@ -332,11 +331,7 @@ def main() -> int:
     config = load_config(args.config)
     output_dir = args.run_dir / "multimetric"
     output_dir.mkdir(parents=True, exist_ok=True)
-    candidates = sorted(
-        path
-        for path in (args.run_dir / "images").glob("*.png")
-        if path.is_file()
-    )
+    candidates = sorted(path for path in (args.run_dir / "images").glob("*.png") if path.is_file())
     if not candidates:
         raise FileNotFoundError(f"No candidates in {args.run_dir / 'images'}")
     style_ref_dir = args.style_reference_root / args.scene
@@ -475,7 +470,11 @@ def main() -> int:
         json.dumps(safe_json(pose_cache), ensure_ascii=False), encoding="utf-8"
     )
     contact_sheet(rows, args.pose, output_dir / "multimetric_contact_sheet.png")
-    print(json.dumps(safe_json({"best": rows[0], "output": str(output_dir)}), ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            safe_json({"best": rows[0], "output": str(output_dir)}), ensure_ascii=False, indent=2
+        )
+    )
     return 0
 
 

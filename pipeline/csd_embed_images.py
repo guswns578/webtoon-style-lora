@@ -14,7 +14,6 @@ import numpy as np
 import torch
 from PIL import Image
 
-
 ROOT = Path(__file__).resolve().parent
 CSD_REPO = ROOT.parent / "third_party" / "CSD"
 sys.path.insert(0, str(CSD_REPO))

@@ -7,7 +7,6 @@ from pathlib import Path
 
 from scipy.stats import spearmanr
 
-
 AUDIT = Path("workspace/char_stage/caption_contamination_audit.csv")
 BENCHMARK = Path(
     "workspace/conditional_face_refine/benchmark_8char_punch_crossed/benchmark_summary.csv"

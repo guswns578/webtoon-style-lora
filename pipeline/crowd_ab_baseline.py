@@ -11,7 +11,6 @@ from urllib import request
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, PngImagePlugin
 
-
 API = "http://127.0.0.1:7861"
 OUTPUT_DIR = Path("outputs/crowd_baseline")
 CHECKPOINT = "waiIllustriousSDXL_v160.safetensors"
@@ -70,9 +69,7 @@ def metrics(image: Image.Image) -> dict[str, float]:
         "ink_ratio_lt200": round(float(np.mean(gray < 200)), 6),
         "midtone_ratio_80_to230": round(float(np.mean((gray >= 80) & (gray < 230))), 6),
         "near_white_ratio_gt245": round(float(np.mean(gray > 245)), 6),
-        "edge_density_delta_gt24": round(
-            float((np.mean(dx > 24) + np.mean(dy > 24)) / 2.0), 6
-        ),
+        "edge_density_delta_gt24": round(float((np.mean(dx > 24) + np.mean(dy > 24)) / 2.0), 6),
         "mean_rgb_chroma": round(float(chroma.mean()), 4),
     }
 
@@ -99,7 +96,10 @@ def make_contact_sheet(rows: list[dict], output: Path) -> None:
             )
         x = index * preview_width
         sheet.paste(preview, (x, 0))
-        draw.rectangle((x, preview_height, x + preview_width, preview_height + label_height), fill=(245, 245, 245))
+        draw.rectangle(
+            (x, preview_height, x + preview_width, preview_height + label_height),
+            fill=(245, 245, 245),
+        )
         label = (
             f"style LoRA weight {row['lora']['weight']:.2f} | "
             f"seed {SEED} | {SAMPLER} {SCHEDULER}"
@@ -204,4 +204,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

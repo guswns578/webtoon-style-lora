@@ -13,7 +13,6 @@ from PIL import Image, ImageDraw, ImageFont
 from pose_metrics import detect_pose, pose_source_quality
 from conditional_face_refine import load_config
 
-
 ROOT = Path(__file__).resolve().parent
 PIPELINE = ROOT / "conditional_face_refine.py"
 DEFAULT_CONFIG = ROOT / "conditional_face_refine_config.json"
@@ -56,17 +55,23 @@ def write_contact_sheet(rows: list[dict], output: Path) -> None:
             f"pose {row.get('selected_pose_score', 0.0):.3f} | "
             f"joint {row.get('selected_identity_pose_score', 0.0):.3f}"
         )
-        draw.multiline_text((x + 6, y + image_h + 4), label, font=label_font, fill="black", spacing=1)
+        draw.multiline_text(
+            (x + 6, y + image_h + 4), label, font=label_font, fill="black", spacing=1
+        )
         draw.rectangle((x, y, x + cell_w - 1, y + image_h + label_h - 1), outline=(145, 145, 145))
     sheet.save(output)
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run the webtoon conditional face-refine benchmark")
+    parser = argparse.ArgumentParser(
+        description="Run the webtoon conditional face-refine benchmark"
+    )
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--pose-root", type=Path, default=DEFAULT_POSE_ROOT)
-    parser.add_argument("--characters", default="char_a,char_b,char_c,char_d,char_e,char_f,char_g,char_h")
+    parser.add_argument(
+        "--characters", default="char_a,char_b,char_c,char_d,char_e,char_f,char_g,char_h"
+    )
     parser.add_argument("--poses", default="punch,cheer")
     parser.add_argument("--seeds", default="43,100")
     parser.add_argument("--resume", action="store_true")
@@ -118,7 +123,13 @@ def main() -> int:
                 ).open("w", encoding="utf-8") as stderr:
                     completed = subprocess.run(command, cwd=ROOT, stdout=stdout, stderr=stderr)
                 if completed.returncode != 0:
-                    failures.append({"character": character, "pose": pose_name, "returncode": completed.returncode})
+                    failures.append(
+                        {
+                            "character": character,
+                            "pose": pose_name,
+                            "returncode": completed.returncode,
+                        }
+                    )
                     print(f"  FAILED ({completed.returncode})", flush=True)
                     continue
             summary = json.loads(summary_path.read_text(encoding="utf-8"))
@@ -153,7 +164,9 @@ def main() -> int:
         "selected_postprocessed",
         "run_dir",
     ]
-    with (args.output / "benchmark_summary.csv").open("w", encoding="utf-8-sig", newline="") as handle:
+    with (args.output / "benchmark_summary.csv").open(
+        "w", encoding="utf-8-sig", newline=""
+    ) as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         for row in rows:
@@ -163,7 +176,12 @@ def main() -> int:
     )
     if rows:
         write_contact_sheet(rows, args.output / "benchmark_contact_sheet.png")
-    print(json.dumps({"completed": len(rows), "failed": len(failures), "output": str(args.output)}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {"completed": len(rows), "failed": len(failures), "output": str(args.output)},
+            ensure_ascii=False,
+        )
+    )
     return 0 if not failures else 1
 
 

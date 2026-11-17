@@ -12,7 +12,6 @@ from pathlib import Path
 import numpy as np
 from wdtagger import Tagger
 
-
 DEFAULT_REFERENCES = Path("workspace/face_crops")
 MODEL = "SmilingWolf/wd-eva02-large-tagger-v3"
 TAGS = [
@@ -125,11 +124,14 @@ def main() -> int:
                 for character, prototype in loo_prototypes.items()
             }
             predicted = min(distances, key=distances.get)
-            predictions.append({"path": str(references[index]), "actual": actual, "predicted": predicted})
+            predictions.append(
+                {"path": str(references[index]), "actual": actual, "predicted": predicted}
+            )
         self_test = {
             "total": len(predictions),
             "correct": sum(row["actual"] == row["predicted"] for row in predictions),
-            "accuracy": sum(row["actual"] == row["predicted"] for row in predictions) / len(predictions),
+            "accuracy": sum(row["actual"] == row["predicted"] for row in predictions)
+            / len(predictions),
             "rows": predictions,
         }
 

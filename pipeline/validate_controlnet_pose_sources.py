@@ -9,7 +9,6 @@ from urllib import request
 
 from pose_metrics import pose_source_quality
 
-
 DEFAULT_INPUT = Path("workspace/pose_src")
 
 

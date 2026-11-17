@@ -4,7 +4,6 @@ import json
 import struct
 from pathlib import Path
 
-
 MODEL_DIR = Path(r"C:\Dev\StabilityMatrix\Data\Packages\forge-neo\models\Lora")
 MODELS = [
     "lineart_locon_v2.safetensors",
@@ -121,4 +120,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

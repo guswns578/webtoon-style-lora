@@ -16,7 +16,6 @@ from huggingface_hub import hf_hub_download
 from PIL import Image, ImageOps
 from tqdm import tqdm
 
-
 DEFAULT_SOURCE = Path(r"data/lineart_clean")
 DEFAULT_DESTINATION = Path(r"data/lineart_clean_v2")
 DEFAULT_REPORT = Path("reports/eva02_v3_report.csv")
@@ -293,16 +292,16 @@ def build_caption(
     detected = {tag for tag, _score in scored_tags}
     if "6+boys" in detected:
         scored_tags = [
-            item for item in scored_tags if item[0] not in {"1boy", "2boys", "3boys", "4boys", "5boys"}
+            item
+            for item in scored_tags
+            if item[0] not in {"1boy", "2boys", "3boys", "4boys", "5boys"}
         ]
     elif "5boys" in detected:
         scored_tags = [
             item for item in scored_tags if item[0] not in {"1boy", "2boys", "3boys", "4boys"}
         ]
     elif "4boys" in detected:
-        scored_tags = [
-            item for item in scored_tags if item[0] not in {"1boy", "2boys", "3boys"}
-        ]
+        scored_tags = [item for item in scored_tags if item[0] not in {"1boy", "2boys", "3boys"}]
     elif "3boys" in detected:
         scored_tags = [item for item in scored_tags if item[0] not in {"1boy", "2boys"}]
     elif "2boys" in detected:
@@ -475,8 +474,7 @@ def main() -> None:
     ]
     destination_captions = list(args.destination.glob("*.txt"))
     missing_captions = sum(
-        not (args.destination / image.name).with_suffix(".txt").exists()
-        for image in source_images
+        not (args.destination / image.name).with_suffix(".txt").exists() for image in source_images
     )
 
     print(f"SOURCE_IMAGES={len(source_images)}")

@@ -159,6 +159,8 @@ docs/
   experiments.md           단계별 실험 기록과 수치
 ```
 
+> 포트폴리오 공개를 위해 포맷(black)과 쓰지 않는 import만 정리했고 로직은 바꾸지 않았습니다. 정리 전 코드는 [`original-snapshot`](https://github.com/guswns578/webtoon-style-lora/tree/original-snapshot) 태그에 있습니다.
+
 ## 역할
 
 산학협력 과제를 혼자 맡아 데이터 정제, 캡셔닝 설계, 학습, 평가 지표 설계·보정, 제작 도구 개발과 납품까지 전 과정을 수행했고, 제작사의 요구와 중간 피드백을 반영했습니다. 구현에는 AI 코딩 도구를 적극 활용했고, 실험 설계·판단 기준·결과 해석은 직접 수립했습니다.

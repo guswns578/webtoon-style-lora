@@ -135,7 +135,15 @@ def main() -> int:
             f"{row['pose_score_median_detected']:.3f} | {row['identity_top1_accuracy']:.1%} | "
             f"{row['ccip_mean_finite']:.4f} |"
         )
-    lines.extend(["", "## 재시도·검수 대상", "", "| 캐릭터 | 포즈 | CCIP | 예측 | 포즈 | 사유 |", "|---|---|---:|---|---:|---|"])
+    lines.extend(
+        [
+            "",
+            "## 재시도·검수 대상",
+            "",
+            "| 캐릭터 | 포즈 | CCIP | 예측 | 포즈 | 사유 |",
+            "|---|---|---:|---|---:|---|",
+        ]
+    )
     for item in categorized:
         if item["issues"]:
             distance = "inf" if item["distance"] is None else f"{item['distance']:.4f}"

@@ -9,7 +9,6 @@ import cv2
 import numpy as np
 from PIL import Image, ImageDraw
 
-
 CLEAN = Path(r"data/lineart_clean")
 REJECTS = Path(r"data/lineart_rejects")
 REPORT = Path(r"reports/lineart_effect_line_filter_report.csv")
@@ -33,7 +32,9 @@ def line_features(path: Path) -> dict[str, float | int]:
     edges = cv2.Canny(small, 80, 180, apertureSize=3)
     min_len = max(70, int(min(sw, sh) * 0.28))
     max_gap = max(8, int(min(sw, sh) * 0.025))
-    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=70, minLineLength=min_len, maxLineGap=max_gap)
+    lines = cv2.HoughLinesP(
+        edges, 1, np.pi / 180, threshold=70, minLineLength=min_len, maxLineGap=max_gap
+    )
 
     line_mask = np.zeros_like(small, dtype=np.uint8)
     long_count = 0
@@ -124,7 +125,12 @@ def reject_reason(f: dict[str, float | int]) -> str:
     # Wide speedline strips are usually just panel transition effects.
     width = int(f["width"])
     height = int(f["height"])
-    if width / max(height, 1) > 1.7 and long_count >= 10 and residual_dark < 0.03 and line_mask > 0.035:
+    if (
+        width / max(height, 1) > 1.7
+        and long_count >= 10
+        and residual_dark < 0.03
+        and line_mask > 0.035
+    ):
         return "wide_speedline_strip"
 
     return ""
@@ -170,23 +176,25 @@ def main() -> None:
 
     with REPORT.open("w", newline="", encoding="utf-8-sig") as f:
         writer = csv.writer(f)
-        writer.writerow([
-            "file",
-            "status",
-            "reason",
-            "width",
-            "height",
-            "dark_ratio",
-            "line_mask_ratio",
-            "long_line_count",
-            "line_length_norm",
-            "residual_dark_ratio",
-            "residual_very_dark_ratio",
-            "center_white",
-            "center_dark",
-            "edge_dark",
-            "edge_very_dark",
-        ])
+        writer.writerow(
+            [
+                "file",
+                "status",
+                "reason",
+                "width",
+                "height",
+                "dark_ratio",
+                "line_mask_ratio",
+                "long_line_count",
+                "line_length_norm",
+                "residual_dark_ratio",
+                "residual_very_dark_ratio",
+                "center_white",
+                "center_dark",
+                "edge_dark",
+                "edge_very_dark",
+            ]
+        )
         for idx, img in enumerate(pngs, 1):
             fts = line_features(img)
             reason = reject_reason(fts)
@@ -195,23 +203,25 @@ def main() -> None:
                 moved.append(img)
                 move_pair_to_rejects(img)
 
-            writer.writerow([
-                img.name,
-                status,
-                reason,
-                fts["width"],
-                fts["height"],
-                f"{float(fts['dark_ratio']):.6f}",
-                f"{float(fts['line_mask_ratio']):.6f}",
-                fts["long_line_count"],
-                f"{float(fts['line_length_norm']):.6f}",
-                f"{float(fts['residual_dark_ratio']):.6f}",
-                f"{float(fts['residual_very_dark_ratio']):.6f}",
-                f"{float(fts['center_white']):.6f}",
-                f"{float(fts['center_dark']):.6f}",
-                f"{float(fts['edge_dark']):.6f}",
-                f"{float(fts['edge_very_dark']):.6f}",
-            ])
+            writer.writerow(
+                [
+                    img.name,
+                    status,
+                    reason,
+                    fts["width"],
+                    fts["height"],
+                    f"{float(fts['dark_ratio']):.6f}",
+                    f"{float(fts['line_mask_ratio']):.6f}",
+                    fts["long_line_count"],
+                    f"{float(fts['line_length_norm']):.6f}",
+                    f"{float(fts['residual_dark_ratio']):.6f}",
+                    f"{float(fts['residual_very_dark_ratio']):.6f}",
+                    f"{float(fts['center_white']):.6f}",
+                    f"{float(fts['center_dark']):.6f}",
+                    f"{float(fts['edge_dark']):.6f}",
+                    f"{float(fts['edge_very_dark']):.6f}",
+                ]
+            )
 
             if idx % 1000 == 0:
                 print(f"{idx}/{len(pngs)} scanned, moved={len(moved)}")

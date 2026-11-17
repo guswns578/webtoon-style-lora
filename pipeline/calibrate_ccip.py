@@ -8,10 +8,7 @@ from pathlib import Path
 import numpy as np
 from imgutils.metrics import ccip_batch_differences
 
-
-DEFAULT_CACHE = Path(
-    "workspace/conditional_face_refine/_cache/reference_features.npz"
-)
+DEFAULT_CACHE = Path("workspace/conditional_face_refine/_cache/reference_features.npz")
 DEFAULT_OUTPUT = Path("workspace/conditional_face_refine/ccip_calibration")
 
 
@@ -73,7 +70,9 @@ def main() -> int:
         predicted, predicted_distance = ranking[0]
         nearest_correct += int(predicted == query_label)
         target_distance = character_scores[query_label]
-        second_distance = min(value for key, value in character_scores.items() if key != query_label)
+        second_distance = min(
+            value for key, value in character_scores.items() if key != query_label
+        )
         trials.append(
             {
                 "path": query_path,
@@ -109,7 +108,9 @@ def main() -> int:
         writer = csv.DictWriter(handle, fieldnames=list(trials[0]))
         writer.writeheader()
         writer.writerows(trials)
-    with (args.output / "threshold_curve.csv").open("w", encoding="utf-8-sig", newline="") as handle:
+    with (args.output / "threshold_curve.csv").open(
+        "w", encoding="utf-8-sig", newline=""
+    ) as handle:
         writer = csv.DictWriter(handle, fieldnames=list(curves[0]))
         writer.writeheader()
         writer.writerows(curves)

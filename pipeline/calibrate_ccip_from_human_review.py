@@ -29,7 +29,9 @@ def metrics(labels: np.ndarray, scores: np.ndarray, threshold: float) -> dict[st
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Calibrate production CCIP threshold from human labels")
+    parser = argparse.ArgumentParser(
+        description="Calibrate production CCIP threshold from human labels"
+    )
     parser.add_argument("labels_csv", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()

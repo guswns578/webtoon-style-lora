@@ -6,7 +6,6 @@ import json
 from collections import Counter
 from pathlib import Path
 
-
 DEFAULT_ROOT = Path("workspace/char_stage")
 FEMALE = {"char_g", "char_h"}
 MALE = {"char_a", "char_e", "char_b", "char_c", "char_d", "char_f"}
@@ -49,20 +48,26 @@ def main() -> int:
         contaminated: list[str] = []
         mixed_people: list[str] = []
         for path in files:
-            tags = {tag.strip() for tag in path.read_text(encoding="utf-8-sig").split(",") if tag.strip()}
+            tags = {
+                tag.strip()
+                for tag in path.read_text(encoding="utf-8-sig").split(",")
+                if tag.strip()
+            }
             counts.update(tags)
             if f"{character}_character" not in tags and not (
                 character == "char_b" and "char_b_legacy_character" in tags
             ):
                 missing_trigger += 1
-            is_mixed = bool(tags & {"2boys", "2girls", "multiple_boys", "multiple_girls", "1boy"}) and bool(
-                tags & {"1girl", "2girls", "multiple_girls"}
-            )
+            is_mixed = bool(
+                tags & {"2boys", "2girls", "multiple_boys", "multiple_girls", "1boy"}
+            ) and bool(tags & {"1girl", "2girls", "multiple_girls"})
             if is_mixed or "solo_focus" in tags:
                 mixed_people.append(str(path))
             contradiction = False
             if character in FEMALE:
-                contradiction = bool(tags & {"1boy", "male_focus", "facial_hair", "beard", "mustache"})
+                contradiction = bool(
+                    tags & {"1boy", "male_focus", "facial_hair", "beard", "mustache"}
+                )
             elif character in MALE:
                 contradiction = "1girl" in tags
             if contradiction:
